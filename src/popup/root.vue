@@ -1,23 +1,24 @@
-<template lang="pug">
-    div
-      el-button(type="primary" @click="tab") New tab 
+<template>
+  <div>
+    <ul v-for="item in dataCK">
+      <li>{{ item.mack }}</li>
+    </ul>
+  </div>
 </template>
 <script>
+  import axios from 'axios'
   export default {
     data: () => ({
+      dataCK: []
     }),
     computed: { },
     created () { },
-    mounted () { },
+    mounted () {
+      axios.get('https://wichart.vn/api/danhsachchungkhoan').then(res => { this.dataCK = res.data })
+    },
     methods: {
-      tab () {
-        chrome.tabs.create({ url: 'pages/app.html' })
-      }
     }
   }
 </script>
-<style lang="scss">
-  div {
-    color: blue
-  }
+<style>
 </style>
