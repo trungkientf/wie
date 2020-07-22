@@ -1,20 +1,16 @@
 <template>
   <div class="container">
     <div class="v-suggestions">
-      <input type="text" placeholder="" class="input completor-input">
+        <input v-model="val" v-on:keyup.enter="submitkq" type="text" placeholder="Nhập mã chứng khoán" class="input completor-input">
       <div class="suggestions">
-        <ul class="items" style="">
-          <li class="item">
-          Namibia
-          </li><li class="item">
-            Panama
-          </li><li class="item">
-            Suriname
-          </li><li class="item">
-            Viet Nam
-          </li>
+        <ul v-for="item in listCK" class="items" style="">
+          <li @click="change(item.mack)" class="item">{{item.mack}} - {{item.ten}}</li>
         </ul>
       </div>
+    </div>
+    <div class="layout-btn" v-if="listCK.length == 1">
+      <a target="_blank" :href="'https://wichart.vn/mychart?mack='+val"><button class="wichart" >Biểu đồ tài chính</button></a>
+      <a target="_blank" :href="'https://wichart.vn/bieudophantich/'+val"><button class="wichart" >Biểu đồ tài chính</button></a>
     </div>
   </div>
 </template>
@@ -22,14 +18,39 @@
   import axios from 'axios'
   export default {
     data: () => ({
-      dataCK: []
+      dataCK: [{"mack": "AAA","ten": "CTCP Nhựa An Phát Xanh"},{"mack": "AAM","ten": "CTCP Thủy sản Mekong"},{"mack": "ABT","ten": "CTCP Xuất nhập khẩu Thủy sản Bến Tre"},{"mack": "ACC","ten": "CTCP Đầu tư và Xây dựng Bình Dương ACC"},{"mack": "ACL","ten": "CTCP Xuất Nhập Khẩu Thủy sản Cửu Long An Giang"},{"mack": "ADS","ten": "CTCP Damsan"},{"mack": "AGF","ten": "CTCP Xuất nhập khẩu Thủy sản An Giang"},{"mack": "AGM","ten": "CTCP Xuất Nhập Khẩu An Giang"},{"mack": "AMD","ten": "CTCP Đầu tư và Khoáng sản FLC Stone"},{"mack": "ANV","ten": "CTCP Nam Việt"},{"mack": "APC","ten": "CTCP Chiếu xạ An Phú"},{"mack": "ASM","ten": "CTCP Tập đoàn Sao Mai"},{"mack": "ASP","ten": "CTCP Tập đoàn Dầu khí An Pha"},{"mack": "AST","ten": "CTCP Dịch vụ Hàng không Taseco"},{"mack": "ATG","ten": "CTCP An Trường An"},{"mack": "BBC","ten": "CTCP BIBICA"},{"mack": "BCE","ten": "CTCP Xây dựng và Giao thông Bình Dương"},{"mack": "BFC","ten": "CTCP Phân bón Bình Điền"},{"mack": "BHN","ten": "Tổng CTCP Bia – Rượu – Nước giải khát Hà Nội"},{"mack": "BMC","ten": "CTCP Khoáng sản Bình Định"}],
+      message: 'người đông bến đợi thuyền xuôi ngược',
+      val: '',
+      show: false
     }),
-    computed: { },
-    created () { },
+    computed: {
+      listCK: function () {
+        if(this.val.length < 4){
+          return this.dataCK.filter( item => {
+            return item['mack'].toLowerCase().includes(this.val.toLowerCase())
+          })
+        } else {
+          return this.dataCK.filter( item => {
+            return item['ten'].toLowerCase().includes(this.val.toLowerCase())
+          })
+        }
+      }
+    },
+    created () {
+      axios.get('https://wichart.vn/api/danhsachchungkhoan')
+      .then(res => {this.dataCK = res.data})
+    },
     mounted () {
-      axios.get('https://wichart.vn/api/danhsachchungkhoan').then(res => { this.dataCK = res.data })
     },
     methods: {
+      change: function(maCk){
+        this.val = maCk
+        //this.show = true
+      },
+      submitkq: function(){
+        this.val = this.listCK[0].mack
+        //this.show = true
+      }
     }
   }
 </script>
@@ -52,6 +73,7 @@
 .v-suggestions .item {
     border-bottom: 1px solid #eee;
     padding: .4rem;
+    cursor: pointer;
 }
 .input{
     -webkit-appearance: none;
@@ -75,5 +97,28 @@
     color: #363636;
     box-shadow: inset 0 1px 2px rgba(10,10,10,.1);
     width: 380px;
+}
+.wichart{
+  color:#fff;
+  background-color: rgba(66,153,225,var(--bg-opacity))!important;
+  border-radius: .25rem!important;
+  padding-left: 1rem!important;
+  padding-right: 1rem!important;
+  padding-top: .5rem!important;
+  padding-bottom: .5rem!important;
+  --bg-opacity: 1!important;
+  background-color: #4299e1!important;
+  border: 1px solid #4299e1;
+  font-size:12px;
+}
+.wichart:hover{
+  color:#fff;
+  background-color: rgba(43,108,176,var(--bg-opacity))!important;
+  --bg-opacity: 1!important;
+  background-color: #2b6cb0!important;
+}
+.layout-btn {
+  text-align: center!important;
+  padding: 1rem;
 }
 </style>
