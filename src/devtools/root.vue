@@ -11,8 +11,5 @@
     methods: { }
   }
 </script>
-<style lang="scss">
-  div {
-    color: blue
-  }
+<style>
 </style>

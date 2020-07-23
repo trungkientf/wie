@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="v-suggestions">
-        <input v-model="val" v-on:keyup.enter="submitkq" type="text" placeholder="Nhập mã chứng khoán" class="input completor-input">
+        <input v-model="val" v-on:keyup.enter="submitkq" type="text" placeholder="Nhập mã chứng khoán" id="searchCK" class="input completor-input">
       <div class="suggestions">
         <ul v-for="item in listCK" class="items" style="">
           <li @click="change(item.mack)" class="item">{{item.mack}} - {{item.ten}}</li>
@@ -9,8 +9,8 @@
       </div>
     </div>
     <div class="layout-btn" v-if="listCK.length == 1">
-      <a target="_blank" :href="'https://wichart.vn/mychart?mack='+val"><button class="wichart" >Biểu đồ tài chính</button></a>
-      <a target="_blank" :href="'https://wichart.vn/bieudophantich/'+val"><button class="wichart" >Biểu đồ tài chính</button></a>
+      <a target="_blank" :href="'https://wichart.vn/mychart?mack='+val"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-bar-chart"></i> Biểu đồ tài chính</button></a>
+      <a target="_blank" :href="'https://wichart.vn/bieudophantich/'+val"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-line-chart"></i> Biểu đồ kỹ thuật</button></a>
     </div>
   </div>
 </template>
@@ -25,13 +25,13 @@
     }),
     computed: {
       listCK: function () {
-        if(this.val.length < 4){
+        if(this.val.length == 3){
           return this.dataCK.filter( item => {
             return item['mack'].toLowerCase().includes(this.val.toLowerCase())
           })
-        } else {
+          } else {
           return this.dataCK.filter( item => {
-            return item['ten'].toLowerCase().includes(this.val.toLowerCase())
+            return (item['mack']+" "+item['ten']).toLowerCase().includes(this.val.toLowerCase())
           })
         }
       }
@@ -41,6 +41,7 @@
       .then(res => {this.dataCK = res.data})
     },
     mounted () {
+      document.getElementById("searchCK").focus()//,2000);
     },
     methods: {
       change: function(maCk){
@@ -56,7 +57,7 @@
 </script>
 <style>
 .container{
-    width: 400px;
+    width: 600px;
     padding: 0.3em;
 }
 .v-suggestions {
@@ -96,26 +97,7 @@
     border-color: #dbdbdb;
     color: #363636;
     box-shadow: inset 0 1px 2px rgba(10,10,10,.1);
-    width: 380px;
-}
-.wichart{
-  color:#fff;
-  background-color: rgba(66,153,225,var(--bg-opacity))!important;
-  border-radius: .25rem!important;
-  padding-left: 1rem!important;
-  padding-right: 1rem!important;
-  padding-top: .5rem!important;
-  padding-bottom: .5rem!important;
-  --bg-opacity: 1!important;
-  background-color: #4299e1!important;
-  border: 1px solid #4299e1;
-  font-size:12px;
-}
-.wichart:hover{
-  color:#fff;
-  background-color: rgba(43,108,176,var(--bg-opacity))!important;
-  --bg-opacity: 1!important;
-  background-color: #2b6cb0!important;
+    width: 592px;
 }
 .layout-btn {
   text-align: center!important;

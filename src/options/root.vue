@@ -12,7 +12,4 @@
   }
 </script>
 <style>
-  div {
-    color: blue
-  }
 </style>
