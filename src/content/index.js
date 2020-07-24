@@ -2,9 +2,24 @@ wiblock = document.createElement('div');
 wiblock.setAttribute("id", "wi-parent");
 document.body.appendChild(wiblock);
 
-document.querySelector('#wi-parent').innerHTML = '<div class="wichart-pop "><div class="wichart-inside"><a class="wi-a-1" href="#" target="_blank"><div class="wi-1"></div></a><a class="wi-a-2" href="#" target="_blank"><div class="wi-2"></div></a></div></div>'
+document.querySelector('#wi-parent').innerHTML = '<div class="wichart-pop "><div class="wichart-inside"><a class="wi-a-1" href="#" target="_blank"><div class="wi-1"></div></a><a class="wi-a-2" href="javascript:void(0)" class="bt" aria-role="button"><div class="wi-2"></div></a></div></div>'
 
-document.head.innerHTML +='<style>.wichart-pop {position: fixed;z-index: 99999;transform: scale(0);transform-origin: top left;} .wi-1 {background-color:#2B6CB0;padding:6px;margin: 10px; border-radius: 4px; font-size:14px;display: inline-block;height:36px} .wi-2 {background-color:#2B6CB0;padding:6px;margin: 10px 10px 10px 0; border-radius: 4px; font-size:14px;display: inline-block;height:36px} .wichart-inside{position: relative;width: 105px;z-index: 100;opacity: 0.97;box-shadow: rgb(0, 0, 0) 0px 0px 5px;border-width: 1px;border-style: solid;border-color: rgb(238, 238, 238);border-image: initial;background: rgb(255, 255, 255);border-radius: 5px;padding: 0px;} .wi-close {display:block;position:absolute; top 3px; right:10px;color: rgb(136, 136, 136);font-size: 16px;font-weight: 700;text-decoration: none;cursor: pointer;}.wichart-pop.active{transform:scale(1);transition:transform 100ms ease-in-out;}</style>';
+document.querySelector('#wi-parent').innerHTML += '<div class="wf-modal" aria-hidden="true" id="wi-modal"><article class="wf-dialog-modal"><header class="wf-header-modal"><h2 class="wi-tit">Biểu đồ kỹ thuật</h2><span class="close"><a href="javascript:void(0)" class="bt ptkt-close" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a></span></header><div class="wf-content-modal"><iframe id="wi-show-chart" style="border-width: 2px; border-style: solid; border-color: #cdcdcd54; border-radius: 0.25rem" width="100%" height="520px" src=""></iframe></div></article></div>'
+
+
+//document.head.innerHTML +='<style>.wichart-pop {position: fixed;z-index: 99999;transform: scale(0);transform-origin: top left;} .wi-1 {background-color:#2B6CB0;padding:6px;margin: 10px; border-radius: 4px; font-size:14px;display: inline-block;height:36px} .wi-2 {background-color:#2B6CB0;padding:6px;margin: 10px 10px 10px 0; border-radius: 4px; font-size:14px;display: inline-block;height:36px} .wichart-inside{position: relative;width: 105px;z-index: 100;opacity: 0.97;box-shadow: rgb(0, 0, 0) 0px 0px 5px;border-width: 1px;border-style: solid;border-color: rgb(238, 238, 238);border-image: initial;background: rgb(255, 255, 255);border-radius: 5px;padding: 0px;} .wi-close {display:block;position:absolute; top 3px; right:10px;color: rgb(136, 136, 136);font-size: 16px;font-weight: 700;text-decoration: none;cursor: pointer;}.wichart-pop.active{transform:scale(1);transition:transform 100ms ease-in-out;}/**Modal */.wf-modal {text-align: left;}.wf-modal .tit{font-size: 20px;margin: 0;}.wf-modal .close .bt {position: absolute;right: 5px;top: 5px;background: none;padding: 5px 10px;border: 0;}.wf-modal.active{content: "";display: none;background: rgba(0, 0, 0, 0.6);position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 100000;}.wf-modal.active.active {display: block;}.wf-modal.active .wf-dialog-modal{-webkit-transform: translate(0, 0);-moz-transform: translate(0, 0);transform: translate(0, 0);top: 5%;}.wf-dialog-modal{background: #fefefe;border: 1px solid #333;border-radius: 5px;margin-left: -150px;position: fixed;left: 30%;top: 100%;z-index: 11;width: 900px;-webkit-transform: translate(0, 500%);-moz-transform: translate(0, 500%);transform: translate(0, 500%);-webkit-transition: -webkit-transform 0.3s ease-out;-moz-transition: -moz-transform 0.3s ease-out;transition: transform 0.3s ease-out;}.wf-content-modal {padding: 10px;}.wf-header-modal,.wf-footer-modal {padding: 10px;}.wf-header-modal {border-bottom: 1px solid #eee;}.wi-tit{font-size:1.875rem;margin:0.25rem 0.25rem 0.25rem 1rem}</style>';
+const css = '.wichart-pop {position: fixed;z-index: 99999;transform: scale(0);transform-origin: top left;} .wi-1 {background-color:#2B6CB0;padding:6px;margin: 10px; border-radius: 4px; font-size:14px;display: inline-block;height:36px} .wi-2 {background-color:#2B6CB0;padding:6px;margin: 10px 10px 10px 0; border-radius: 4px; font-size:14px;display: inline-block;height:36px} .wichart-inside{position: relative;width: 105px;z-index: 100;opacity: 0.97;box-shadow: rgb(0, 0, 0) 0px 0px 5px;border-width: 1px;border-style: solid;border-color: rgb(238, 238, 238);border-image: initial;background: rgb(255, 255, 255);border-radius: 5px;padding: 0px;} .wi-close {display:block;position:absolute; top 3px; right:10px;color: rgb(136, 136, 136);font-size: 16px;font-weight: 700;text-decoration: none;cursor: pointer;}.wichart-pop.active{transform:scale(1);transition:transform 100ms ease-in-out;}/**Modal */.wf-modal {text-align: left;}.wf-modal .tit{font-size: 20px;margin: 0;}.wf-modal .close .bt {position: absolute;right: 5px;top: 5px;background: none;padding: 5px 10px;border: 0;}.wf-modal.active{content: "";display: none;background: rgba(0, 0, 0, 0.6);position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 100000;}.wf-modal.active.active {display: block;}.wf-modal.active .wf-dialog-modal{-webkit-transform: translate(0, 0);-moz-transform: translate(0, 0);transform: translate(0, 0);top: 5%;}.wf-dialog-modal{background: #fefefe;border: 1px solid #333;border-radius: 5px;margin-left: -150px;position: fixed;left: 30%;top: 100%;z-index: 11;width: 900px;-webkit-transform: translate(0, 500%);-moz-transform: translate(0, 500%);transform: translate(0, 500%);-webkit-transition: -webkit-transform 0.6s ease;-moz-transition: -moz-transform 0.3s ease-out;transition: transform 0.3s ease-out;}.wf-content-modal {padding: 10px;}.wf-header-modal,.wf-footer-modal {padding: 10px;}.wf-header-modal {border-bottom: 1px solid #eee;}.wi-tit{font-size:1.875rem;margin:0.25rem 0.25rem 0.25rem 1rem}'
+const head = document.head || document.getElementsByTagName('head')[0]
+const style = document.createElement('style');
+head.appendChild(style);
+style.type = 'text/css';
+if (style.styleSheet){
+  // This is required for IE8 and below.
+  style.styleSheet.cssText = css;
+} else {
+  style.appendChild(document.createTextNode(css));
+}
+
 
 const wia1 = document.querySelector('.wi-a-1')
 const wia2 = document.querySelector('.wi-a-2')
@@ -32,11 +47,21 @@ document.body.addEventListener('click',() => {
     wipop.classList.remove('active')
 })
 
+document.querySelector('.ptkt-close').addEventListener('click', () => {
+    document.querySelector('.wf-modal').classList.remove('active')
+})
+
+document.querySelector('.wi-a-2').addEventListener('click', () => {
+    document.querySelector('.wf-modal').classList.add('active')
+    document.querySelector('.wi-tit').innerHTML = "Biểu đồ kỹ thuật " + window.getSelection().toString().toUpperCase()
+    document.querySelector('#wi-show-chart').setAttribute('src','https://dchart.vndirect.com.vn/?language=vi&symbol='+window.getSelection().toString().toUpperCase()+'&timeframe=D')
+})
+
 document.body.addEventListener('dblclick', (event)=>{ 
     // debug click
     //console.log( window.getSelection().toString() );
     checkClick(event)
     wia1.setAttribute('href','https://wichart.vn/mychart?mack='+window.getSelection().toString())
-    wia2.setAttribute('href','https://wichart.vn/bieudophantich/'+window.getSelection().toString())
+    //wia2.setAttribute('href','https://wichart.vn/bieudophantich/'+window.getSelection().toString())
 })
 

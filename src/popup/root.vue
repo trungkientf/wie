@@ -1,27 +1,34 @@
 <template>
   <div class="container">
-    <div class="v-suggestions">
-        <input v-model="val" v-on:keyup.enter="submitkq" type="text" placeholder="Nhập mã chứng khoán" id="searchCK" class="input completor-input">
-      <div class="suggestions">
-        <ul v-for="item in listCK" class="items" style="">
-          <li @click="change(item.mack)" class="item">{{item.mack}} - {{item.ten}}</li>
+    <Market />
+    <div class="v-suggestions bg-white -mt-12" :class="(listCK.length === 1)?'rounded-main shadow-lg':''">
+        <input class="input rounded-md shadow-xl bg-gray-200 text-gray-800 completor-input -mt-20 shadow-inner" v-model="val" v-on:keyup.enter="submitkq" type="text" placeholder="Nhập mã chứng khoán" id="searchCK">
+        <a href="https://wichart.vn" target="_blank"><img src="https://wigroup.vn/wp-content/uploads/2020/07/fav-chart.svg" class="wi-icon" alt=""></a>
+      
+      <div v-if="listCK.length !== 1" class="suggestions text-gray-800 -mt-4">
+        <ul v-if="1" class="items" style="">
+          <li v-for="item in listCK" @click="change(item.mack)" class="item">{{item.mack}} - {{item.ten}}</li>
         </ul>
       </div>
+      <Dn v-if="listCK.length === 1" :mack="listCK[0]" />
     </div>
-    <div class="layout-btn" v-if="listCK.length == 1">
-      <a target="_blank" :href="'https://wichart.vn/mychart?mack='+val"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-bar-chart"></i> Biểu đồ tài chính</button></a>
-      <a target="_blank" :href="'https://wichart.vn/bieudophantich/'+val"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-line-chart"></i> Biểu đồ kỹ thuật</button></a>
-    </div>
+    <div v-if="0" class= "inline-block w-1/2 "><iframe id="chart-ck" :src="'https://m.cophieu68.vn/embedded/chart_r.php?id='+listCK[0].mack" width="300px" height="170px" frameborder="0"></iframe></div>
   </div>
 </template>
 <script>
   import axios from 'axios'
+  import Market from './market.vue'
+  import Dn from './dn.vue'
   export default {
+    components: {
+      Market,
+      Dn
+    },
     data: () => ({
       dataCK: [{"mack": "AAA","ten": "CTCP Nhựa An Phát Xanh"},{"mack": "AAM","ten": "CTCP Thủy sản Mekong"},{"mack": "ABT","ten": "CTCP Xuất nhập khẩu Thủy sản Bến Tre"},{"mack": "ACC","ten": "CTCP Đầu tư và Xây dựng Bình Dương ACC"},{"mack": "ACL","ten": "CTCP Xuất Nhập Khẩu Thủy sản Cửu Long An Giang"},{"mack": "ADS","ten": "CTCP Damsan"},{"mack": "AGF","ten": "CTCP Xuất nhập khẩu Thủy sản An Giang"},{"mack": "AGM","ten": "CTCP Xuất Nhập Khẩu An Giang"},{"mack": "AMD","ten": "CTCP Đầu tư và Khoáng sản FLC Stone"},{"mack": "ANV","ten": "CTCP Nam Việt"},{"mack": "APC","ten": "CTCP Chiếu xạ An Phú"},{"mack": "ASM","ten": "CTCP Tập đoàn Sao Mai"},{"mack": "ASP","ten": "CTCP Tập đoàn Dầu khí An Pha"},{"mack": "AST","ten": "CTCP Dịch vụ Hàng không Taseco"},{"mack": "ATG","ten": "CTCP An Trường An"},{"mack": "BBC","ten": "CTCP BIBICA"},{"mack": "BCE","ten": "CTCP Xây dựng và Giao thông Bình Dương"},{"mack": "BFC","ten": "CTCP Phân bón Bình Điền"},{"mack": "BHN","ten": "Tổng CTCP Bia – Rượu – Nước giải khát Hà Nội"},{"mack": "BMC","ten": "CTCP Khoáng sản Bình Định"}],
-      message: 'người đông bến đợi thuyền xuôi ngược',
       val: '',
-      show: false
+      show: false,
+      market: []
     }),
     computed: {
       listCK: function () {
@@ -34,14 +41,19 @@
             return (item['mack']+" "+item['ten']).toLowerCase().includes(this.val.toLowerCase())
           })
         }
-      }
+      },
     },
     created () {
       axios.get('https://wichart.vn/api/danhsachchungkhoan')
       .then(res => {this.dataCK = res.data})
+      axios.get('https://finance.vietstock.vn/data/getmarketprice?type=2')
+      .then(res => {this.market = res.data})
+      setInterval(() => {axios.get('https://finance.vietstock.vn/data/getmarketprice?type=2')
+      .then(res => {this.market = res.data})},5000)
+      //setInterval(() => {document.getElementById('chart-ck').setAttribute('src','https://m.cophieu68.vn/embedded/chart_r.php?id='+this.listCK[0].mack)},20000)
     },
     mounted () {
-      document.getElementById("searchCK").focus()//,2000);
+      setTimeout(()=>{document.getElementById("searchCK").focus()},500);
     },
     methods: {
       change: function(maCk){
@@ -56,51 +68,64 @@
   }
 </script>
 <style>
+::-webkit-scrollbar {
+display: none;
+}
 .container{
-    width: 600px;
-    padding: 0.3em;
+    width: 650px;
 }
 .v-suggestions {
     position: relative;
     box-sizing: border-box;
+    height: 500px;
 }
-.v-suggestions .items {
-    list-style: none;
-    border: 1px solid #eee;
-    margin: 0;
-    padding: 0;
-    border-width: 0 1px 1px;
+ul.items{
+    border-bottom: solid 1px #eeeff2;
 }
 .v-suggestions .item {
-    border-bottom: 1px solid #eee;
-    padding: .4rem;
+  border-top: solid 1px #eeeff2;
+  margin-bottom: 2px;
+    padding: 10px;
+    padding-left: 5rem;
     cursor: pointer;
+    font-size: 0.875rem;
+    border-radius: 0.125rem;
+    background: #fff;
+}
+li.item:hover {
+      box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
 }
 .input{
     -webkit-appearance: none;
     -webkit-box-align: center;
     align-items: center;
-    border: 1px solid transparent;
-    border-radius: 3px;
     display: inline-flex;
     font-size: 1rem;
     -webkit-box-pack: start;
     justify-content: flex-start;
-    line-height: 1.5;
+    line-height: 2;
     padding-bottom: calc(.375em - 1px);
     padding-left: calc(.625em - 1px);
     padding-right: calc(.625em - 1px);
     padding-top: calc(.375em - 1px);
     position: relative;
     vertical-align: top;
-    background-color: #fff;
-    border-color: #dbdbdb;
-    color: #363636;
-    box-shadow: inset 0 1px 2px rgba(10,10,10,.1);
-    width: 592px;
+    width: 280px;
+    margin-left: 6.7rem;
 }
-.layout-btn {
-  text-align: center!important;
-  padding: 1rem;
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+.rounded-main{
+    border-top-left-radius: 1.5rem ;
+    border-top-right-radius: 1.5rem ;
+}
+.wi-icon {
+  width: 38px;
+  position: absolute;
+  top: -76px;
+  left: 46px;
 }
 </style>

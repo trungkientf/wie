@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Market />
     <div class="v-suggestions">
         <input v-model="val" v-on:keyup.enter="submitkq" type="text" placeholder="Nhập mã chứng khoán" id="searchCK" class="input completor-input">
       <div class="suggestions">
@@ -9,19 +10,24 @@
       </div>
     </div>
     <div class="layout-btn" v-if="listCK.length == 1">
-      <a target="_blank" :href="'https://wichart.vn/mychart?mack='+val"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-bar-chart"></i> Biểu đồ tài chính</button></a>
-      <a target="_blank" :href="'https://wichart.vn/bieudophantich/'+val"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-line-chart"></i> Biểu đồ kỹ thuật</button></a>
+      <a target="_blank" :href="'https://wichart.vn/mychart?mack='+listCK[0].mack"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-bar-chart"></i> Biểu đồ tài chính</button></a>
+      <a target="_blank" :href="'https://wichart.vn/bieudophantich/'+listCK[0].mack"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-line-chart"></i> Biểu đồ kỹ thuật</button></a>
     </div>
+    <div class= "inline-block w-1/2 "><iframe id="chart-ck" :src="'https://m.cophieu68.vn/embedded/chart_r.php?id='+listCK[0].mack" width="300px" height="170px" frameborder="0"></iframe></div>
   </div>
 </template>
 <script>
   import axios from 'axios'
+  import Market from './market.vue'
   export default {
+    components: {
+      Market
+    },
     data: () => ({
       dataCK: [{"mack": "AAA","ten": "CTCP Nhựa An Phát Xanh"},{"mack": "AAM","ten": "CTCP Thủy sản Mekong"},{"mack": "ABT","ten": "CTCP Xuất nhập khẩu Thủy sản Bến Tre"},{"mack": "ACC","ten": "CTCP Đầu tư và Xây dựng Bình Dương ACC"},{"mack": "ACL","ten": "CTCP Xuất Nhập Khẩu Thủy sản Cửu Long An Giang"},{"mack": "ADS","ten": "CTCP Damsan"},{"mack": "AGF","ten": "CTCP Xuất nhập khẩu Thủy sản An Giang"},{"mack": "AGM","ten": "CTCP Xuất Nhập Khẩu An Giang"},{"mack": "AMD","ten": "CTCP Đầu tư và Khoáng sản FLC Stone"},{"mack": "ANV","ten": "CTCP Nam Việt"},{"mack": "APC","ten": "CTCP Chiếu xạ An Phú"},{"mack": "ASM","ten": "CTCP Tập đoàn Sao Mai"},{"mack": "ASP","ten": "CTCP Tập đoàn Dầu khí An Pha"},{"mack": "AST","ten": "CTCP Dịch vụ Hàng không Taseco"},{"mack": "ATG","ten": "CTCP An Trường An"},{"mack": "BBC","ten": "CTCP BIBICA"},{"mack": "BCE","ten": "CTCP Xây dựng và Giao thông Bình Dương"},{"mack": "BFC","ten": "CTCP Phân bón Bình Điền"},{"mack": "BHN","ten": "Tổng CTCP Bia – Rượu – Nước giải khát Hà Nội"},{"mack": "BMC","ten": "CTCP Khoáng sản Bình Định"}],
-      message: 'người đông bến đợi thuyền xuôi ngược',
       val: '',
-      show: false
+      show: false,
+      market: []
     }),
     computed: {
       listCK: function () {
@@ -34,14 +40,19 @@
             return (item['mack']+" "+item['ten']).toLowerCase().includes(this.val.toLowerCase())
           })
         }
-      }
+      },
     },
     created () {
       axios.get('https://wichart.vn/api/danhsachchungkhoan')
       .then(res => {this.dataCK = res.data})
+      axios.get('https://finance.vietstock.vn/data/getmarketprice?type=2')
+      .then(res => {this.market = res.data})
+      setInterval(() => {axios.get('https://finance.vietstock.vn/data/getmarketprice?type=2')
+      .then(res => {this.market = res.data})},5000)
+      setInterval(() => {document.getElementById('chart-ck').setAttribute('src','https://m.cophieu68.vn/embedded/chart_r.php?id='+this.listCK[0].mack)},20000)
     },
     mounted () {
-      document.getElementById("searchCK").focus()//,2000);
+      setTimeout(()=>{document.getElementById("searchCK").focus()},500);
     },
     methods: {
       change: function(maCk){
@@ -101,6 +112,9 @@
 }
 .layout-btn {
   text-align: center!important;
-  padding: 1rem;
+  padding: 1rem 0rem;
 }
+
+
+
 </style>
