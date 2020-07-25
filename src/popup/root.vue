@@ -1,11 +1,11 @@
 <template>
-  <div class="container">
+  <div class="container mx-auto">
     <Market />
-    <div class="v-suggestions bg-white -mt-12" :class="(listCK.length === 1)?'rounded-main shadow-lg':''">
+    <div class="v-suggestions bg-white -mt-12" :class="(listCK.length === 1)?'rounded-main':''">
         <input class="input rounded-md shadow-xl bg-gray-200 text-gray-800 completor-input -mt-20 shadow-inner" v-model="val" v-on:keyup.enter="submitkq" type="text" placeholder="Nhập mã chứng khoán" id="searchCK">
-        <a href="https://wichart.vn" target="_blank"><img src="https://wigroup.vn/wp-content/uploads/2020/07/fav-chart.svg" class="wi-icon" alt=""></a>
+        <a target="_blank"><img @click="doaction" src="/images/wi.svg" class="wi-icon" alt=""></a>
       
-      <div v-if="listCK.length !== 1" class="suggestions text-gray-800 -mt-4">
+      <div v-if="listCK.length !== 1" class="suggestions text-gray-800 -mt-6">
         <ul v-if="1" class="items" style="">
           <li v-for="item in listCK" @click="change(item.mack)" class="item">{{item.mack}} - {{item.ten}}</li>
         </ul>
@@ -50,7 +50,7 @@
       .then(res => {this.market = res.data})
       setInterval(() => {axios.get('https://finance.vietstock.vn/data/getmarketprice?type=2')
       .then(res => {this.market = res.data})},5000)
-      //setInterval(() => {document.getElementById('chart-ck').setAttribute('src','https://m.cophieu68.vn/embedded/chart_r.php?id='+this.listCK[0].mack)},20000)
+      setInterval(() => {document.getElementById('chart-ck').setAttribute('src','https://m.cophieu68.vn/embedded/chart_r.php?id='+this.listCK[0].mack)},20000)
     },
     mounted () {
       setTimeout(()=>{document.getElementById("searchCK").focus()},500);
@@ -63,7 +63,16 @@
       submitkq: function(){
         this.val = this.listCK[0].mack
         //this.show = true
-      }
+      },
+      nhap: function(){
+        document.getElementById("searchCK").focus();
+      },
+      doaction: function (id, kyBaoCao)
+		  {
+			var top=(screen.height/2)-300;
+			var left=(screen.width/2);
+			window.open('/pages/options.html','Wichart','scrollbars=yes,width=650,height=600,top='+top+',left='+left).focus();
+		}
     }
   }
 </script>
@@ -80,10 +89,9 @@ display: none;
     height: 500px;
 }
 ul.items{
-    border-bottom: solid 1px #eeeff2;
 }
 .v-suggestions .item {
-  border-top: solid 1px #eeeff2;
+  border-bottom: solid 1px #eeeff2;
   margin-bottom: 2px;
     padding: 10px;
     padding-left: 5rem;

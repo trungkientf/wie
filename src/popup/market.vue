@@ -52,7 +52,7 @@
       .then(res => {this.market = res.data})
       setInterval(() => {axios.get('https://finance.vietstock.vn/data/getmarketprice?type=2')
       .then(res => {this.market = res.data})},5000)
-      //setInterval(() => {document.getElementById('chart-vnindex').setAttribute('src','https://m.cophieu68.vn/embedded/chart_r.php?id=^vnindex')},20000)
+      setInterval(() => {document.getElementById('chart-vnindex').setAttribute('src','https://m.cophieu68.vn/embedded/chart_r.php?id=^vnindex')},20000)
     },
     mounted () {
     },

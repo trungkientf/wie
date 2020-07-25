@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <Market />
     <div class="v-suggestions">
         <input v-model="val" v-on:keyup.enter="submitkq" type="text" placeholder="Nhập mã chứng khoán" id="searchCK" class="input completor-input">
       <div class="suggestions">
@@ -13,7 +12,7 @@
       <a target="_blank" :href="'https://wichart.vn/mychart?mack='+listCK[0].mack"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-bar-chart"></i> Biểu đồ tài chính</button></a>
       <a target="_blank" :href="'https://wichart.vn/bieudophantich/'+listCK[0].mack"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm" ><i class="fe fe-line-chart"></i> Biểu đồ kỹ thuật</button></a>
     </div>
-    <div class= "inline-block w-1/2 "><iframe id="chart-ck" :src="'https://m.cophieu68.vn/embedded/chart_r.php?id='+listCK[0].mack" width="300px" height="170px" frameborder="0"></iframe></div>
+    <div v-if="false" class= "inline-block w-1/2 "><iframe id="chart-ck" :src="'https://m.cophieu68.vn/embedded/chart_r.php?id='+listCK[0].mack" width="300px" height="170px" frameborder="0"></iframe></div>
   </div>
 </template>
 <script>
