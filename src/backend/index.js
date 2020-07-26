@@ -8,7 +8,7 @@ function openWi() {
   chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
       "id": "wi",
-      "title": "A Wichart",
+      "title": "A Little Wichart",
       "contexts": ["all"]
     });
   });

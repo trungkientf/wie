@@ -1,34 +1,40 @@
 <template>
   <div class="container mx-auto">
     <Market />
-    <div class="v-suggestions bg-white -mt-12" :class="(listCK.length === 1)?'rounded-main':''">
+    <div class="v-suggestions bg-white -mt-12" :class="(listCK.length === 1 || marketshow == true)?'rounded-main':''">
         <input class="input rounded-md shadow-xl bg-gray-200 text-gray-800 completor-input -mt-20 shadow-inner" v-model="val" v-on:keyup.enter="submitkq" type="text" placeholder="Nhập mã chứng khoán" id="searchCK">
-        <a target="_blank"><img @click="doaction" src="/images/wi.svg" class="wi-icon" alt=""></a>
+        <a href="https://wichart.vn" target="_blank"><img src="/images/wi.svg" class="wi-icon" alt=""></a>
+        <div class="inline-block text-base marketwatch-tg font-medium text-blue-700 hover:text-blue-800" @click="changeMV" v-if="marketshow == true"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="inline-block mb-1"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> <span class="">Thông tin thị trường</span></div>
+        <div class="inline-block text-base marketwatch-tg font-medium text-gray-500 hover:text-gray-600" @click="changeMV" v-if="marketshow == false"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="inline-block mb-1"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg> <span class="">Thông tin thị trường</span></div>
       
-      <div v-if="listCK.length !== 1" class="suggestions text-gray-800 -mt-6">
-        <ul v-if="1" class="items" style="">
+      <div v-if="listCK.length !== 1 && marketshow == false" class="suggestions text-gray-800 -mt-6">
+        <ul class="items" style="">
           <li v-for="item in listCK" @click="change(item.mack)" class="item">{{item.mack}} - {{item.ten}}</li>
         </ul>
       </div>
-      <Dn v-if="listCK.length === 1" :mack="listCK[0]" />
+      <Dn v-if="listCK.length === 1 && marketshow == false" :mack="listCK[0]" />
+      <MarketWatch v-if="marketshow" :mack="listCK[0]" />
     </div>
     <div v-if="0" class= "inline-block w-1/2 "><iframe id="chart-ck" :src="'https://m.cophieu68.vn/embedded/chart_r.php?id='+listCK[0].mack" width="300px" height="170px" frameborder="0"></iframe></div>
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import Market from './market.vue'
-  import Dn from './dn.vue'
+  import Market from './Components/market/market.vue'
+  import Dn from './Components/dn/dn.vue'
+  import MarketWatch from './Components/market/marketWatch.vue'
   export default {
     components: {
       Market,
-      Dn
+      Dn,
+      MarketWatch
     },
     data: () => ({
       dataCK: [{"mack": "AAA","ten": "CTCP Nhựa An Phát Xanh"},{"mack": "AAM","ten": "CTCP Thủy sản Mekong"},{"mack": "ABT","ten": "CTCP Xuất nhập khẩu Thủy sản Bến Tre"},{"mack": "ACC","ten": "CTCP Đầu tư và Xây dựng Bình Dương ACC"},{"mack": "ACL","ten": "CTCP Xuất Nhập Khẩu Thủy sản Cửu Long An Giang"},{"mack": "ADS","ten": "CTCP Damsan"},{"mack": "AGF","ten": "CTCP Xuất nhập khẩu Thủy sản An Giang"},{"mack": "AGM","ten": "CTCP Xuất Nhập Khẩu An Giang"},{"mack": "AMD","ten": "CTCP Đầu tư và Khoáng sản FLC Stone"},{"mack": "ANV","ten": "CTCP Nam Việt"},{"mack": "APC","ten": "CTCP Chiếu xạ An Phú"},{"mack": "ASM","ten": "CTCP Tập đoàn Sao Mai"},{"mack": "ASP","ten": "CTCP Tập đoàn Dầu khí An Pha"},{"mack": "AST","ten": "CTCP Dịch vụ Hàng không Taseco"},{"mack": "ATG","ten": "CTCP An Trường An"},{"mack": "BBC","ten": "CTCP BIBICA"},{"mack": "BCE","ten": "CTCP Xây dựng và Giao thông Bình Dương"},{"mack": "BFC","ten": "CTCP Phân bón Bình Điền"},{"mack": "BHN","ten": "Tổng CTCP Bia – Rượu – Nước giải khát Hà Nội"},{"mack": "BMC","ten": "CTCP Khoáng sản Bình Định"}],
-      val: '',
+      val: 'VNM',
       show: false,
-      market: []
+      market: [],
+      marketshow: false
     }),
     computed: {
       listCK: function () {
@@ -67,11 +73,8 @@
       nhap: function(){
         document.getElementById("searchCK").focus();
       },
-      doaction: function (id, kyBaoCao)
-		  {
-			var top=(screen.height/2)-300;
-			var left=(screen.width/2);
-			window.open('/pages/options.html','Wichart','scrollbars=yes,width=650,height=600,top='+top+',left='+left).focus();
+      changeMV: function (){
+			this.marketshow = !this.marketshow
 		}
     }
   }
@@ -119,7 +122,7 @@ li.item:hover {
     position: relative;
     vertical-align: top;
     width: 280px;
-    margin-left: 6.7rem;
+    margin-left: 7rem;
 }
 
 textarea:focus, input:focus{
@@ -134,6 +137,12 @@ textarea:focus, input:focus{
   width: 38px;
   position: absolute;
   top: -76px;
-  left: 46px;
+  left: 51px;
+}
+.marketwatch-tg{
+  position: absolute;
+  top: -72px;
+  left: 421px;
+  cursor: pointer;
 }
 </style>
