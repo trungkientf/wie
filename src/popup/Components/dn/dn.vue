@@ -8,25 +8,17 @@
         </div>
         <Status  :mack="mack" :trade="trade" :changeTrade="changeTrade" />
         <div class="text-center">
-          <div @click="setActive(1)" :class="(activeTab == 1)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4">Tổng quan</div>
-          <div @click="setActive(2)" :class="(activeTab == 2)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4">Hồ sơ</div>
-          <div @click="setActive(3)" :class="(activeTab == 3)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4">Tin tức</div>
-          <div @click="setActive(4)" :class="(activeTab == 4)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4">Ghi chú</div>
-          <div @click="setActive(5)" :class="(activeTab == 5)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4">PTKT</div>
-        </div>
-        <div v-if="0" class="my-2">
-            <iframe :class="(activeTab == 1)?'':'hidden'" src="https://mkw.vndirect.com.vn/leader_lagger?index=VNINDEX&size=10&lang=vi" width="640px" height="400px" frameborder="0"></iframe>
-            <iframe :class="(activeTab == 2)?'':'hidden'" src="https://mkw.vndirect.com.vn/liquidity?index=VNINDEX&lang=vi" width="640px" height="400px" frameborder="0"></iframe>
-            <div class="text-center">
-              <div class="inline-block cursor-pointer m-4 text-gray-600 hover:text-gray-800 text-base underline"><i class="fe fe-link-external mx-1"></i> Xem kích thước lớn</div>
-            </div>
-            <iframe :class="(activeTab == 5)?'':'hidden'" :src="'https://dchart.vndirect.com.vn/?language=vi&symbol='+mack.mack+'&timeframe=D'" width="640px" height="420px" frameborder="0" style="border-width: 2px; border-style: solid; border-color: #cdcdcd54; border-radius: 0.25rem"></iframe>
+          <div @click="setActive(1)" :class="(activeTab == 1)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4 hover:text-blue-300">Tổng quan</div>
+          <div @click="setActive(2)" :class="(activeTab == 2)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4 hover:text-blue-300">Hồ sơ</div>
+          <div @click="setActive(3)" :class="(activeTab == 3)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4 hover:text-blue-300">Tin tức</div>
+          <div @click="setActive(4)" :class="(activeTab == 4)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4 hover:text-blue-300">Ghi chú</div>
+          <div @click="setActive(5)" :class="(activeTab == 5)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4 hover:text-blue-300">PTKT</div>
         </div>
         <Tongquan v-if="activeTab == 1" :mack="mack" :trade="trade" />
         <Hoso v-if="activeTab == 2" :mack="mack" />
         <Tintuc v-if="activeTab == 3" :mack="mack" />
+        <Note v-if="activeTab == 4" :mack="mack" />
         <PTKT v-if="activeTab == 5" :mack="mack" />
-        <iframe v-if="false" v-resize="{ log: true }" width="640px" :src="'https://wichart.vn/tintuc/'+mack.mack" frameborder="0" scrolling="yes" ></iframe>
       
     </div>
 </template>
@@ -37,6 +29,7 @@
   import Tongquan from './tongquan.vue'
   import Hoso from './hoso.vue'
   import Tintuc from './tintuc.vue'
+  import Note from './note.vue'
   export default {
     name: 'Dn',
     components: {
@@ -44,11 +37,12 @@
       Status,
       Tongquan,
       Hoso,
-      Tintuc
+      Tintuc,
+      Note
     },
     props: { mack:Object },
     data: () => ({
-      activeTab: 2,
+      activeTab: 1,
       trade: '',
       changeTrade: ''
     }),
@@ -63,11 +57,11 @@
             Axios.post('https://finance.vietstock.vn/company/tradinginfo',{
             code: this.mack.mack,
             s: 0
-        }).then(res => { 
+          }).then(res => { 
             if (res.data.Change == this.trade.Change) {this.changeTrade = ''} else if (res.data.Change > this.trade.Change) {this.changeTrade = 'bg-green-200'} else {this.changeTrade = 'bg-red-200'}
             this.trade = res.data
             })
-        },4000)
+        },6000)
     },
     mounted () {
       window.addEventListener('DOMContentLoaded', function(e) {

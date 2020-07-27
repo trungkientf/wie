@@ -9,16 +9,18 @@
             <div v-html="desDN" ></div>
         </div>
     </div>
-    <div class="rounded-lg mx-auto mt-8 mb-6 bg-gray-200 text-center shadow-inner " style="width:16.25rem">
-        <div @click="setActive(1)" :class="(activeTabHS == 1)?'text-white bg-blue-600':'text-blue-600'" class="text-base cursor-pointer py-1 px-4 w-32 rounded-lg inline-block">Cổ đông lớn</div>
-        <div @click="setActive(2)" :class="(activeTabHS == 1)?'text-blue-600':'text-white bg-blue-600'" class="text-base cursor-pointer py-1 px-4 w-32 rounded-lg inline-block">Ban lãnh đạo</div>
+    <div class="bg-gray-200 shadow-inner p-1">
+        <div class="rounded-lg mx-auto mt-4 mb-4 bg-white text-center " style="width:16.25rem">
+            <div @click="setActive(1)" :class="(activeTabHS == 1)?'text-white bg-blue-600':'text-blue-600'" class="text-base cursor-pointer py-1 px-4 w-32 rounded-lg inline-block">Cổ đông lớn</div>
+            <div @click="setActive(2)" :class="(activeTabHS == 1)?'text-blue-600':'text-white bg-blue-600'" class="text-base cursor-pointer py-1 px-4 w-32 rounded-lg inline-block">Ban lãnh đạo</div>
+        </div>
     </div>
     <div class="">
     <div :class="(activeTabHS == 1)?'':'hidden'" class="mb-6">
-        <iframe :src="'https://wichart.vn/codong/'+mack.mack" width="640px" height="290px" frameborder="0"></iframe>
+        <iframe :src="'https://wichart.vn/wiapi/apicodong/'+mack.mack" width="640px" height="300px" frameborder="0"></iframe>
     </div>
     <div :class="(activeTabHS == 2)?'':'hidden'" class="mb-6">
-        <iframe :src="'https://wichart.vn/banlanhdao/'+mack.mack" width="640px" height="300px" frameborder="0"></iframe>
+        <iframe :src="'https://wichart.vn/wiapi/apibanlanhdao/'+mack.mack" width="640px" height="300px" frameborder="0"></iframe>
     </div>
     </div>
 </div>

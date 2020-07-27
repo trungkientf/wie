@@ -206,7 +206,7 @@ export default {
   content: attr(title);
   font-size: 12px;
   padding: 0.5rem;
-  left: 480px;
+  left: 477px;
   top: 70px;
 }
 .tooltip:hover:before{
@@ -214,7 +214,7 @@ export default {
   border-color: #444 transparent;
   border-width: 12px 6px 0 6px;
   content: "";
-  left: 549px;
+  left: 546px;
   top: 98px;
   position: absolute;
 }

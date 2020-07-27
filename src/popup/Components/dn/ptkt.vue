@@ -1,5 +1,5 @@
 <template>
-    <div class="my-2">
+    <div class="border-t-2 border-gray">
         <div class="text-center">
             <div @click="zoomPTKT(mack.mack)" class="inline-block cursor-pointer m-4 text-gray-600 hover:text-gray-800 text-base underline"><i class="fe fe-link-external mx-1"></i> Xem kích thước lớn</div>
         </div>

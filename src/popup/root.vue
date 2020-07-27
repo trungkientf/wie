@@ -15,7 +15,13 @@
       <Dn v-if="listCK.length === 1 && marketshow == false" :mack="listCK[0]" />
       <MarketWatch v-if="marketshow" :mack="listCK[0]" />
     </div>
-    <div v-if="0" class= "inline-block w-1/2 "><iframe id="chart-ck" :src="'https://m.cophieu68.vn/embedded/chart_r.php?id='+listCK[0].mack" width="300px" height="170px" frameborder="0"></iframe></div>
+    <div>
+      <a href="https://wichart.vn" target="_blank">
+      <img class="float-right mx-4 my-4" width="100px" src="/images/wichart.svg" alt="wichart">
+      <div class="text-base italic text-gray-700 float-right mt-6">Sản phẩm của </div>
+      </a>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -31,7 +37,7 @@
     },
     data: () => ({
       dataCK: [{"mack": "AAA","ten": "CTCP Nhựa An Phát Xanh"},{"mack": "AAM","ten": "CTCP Thủy sản Mekong"},{"mack": "ABT","ten": "CTCP Xuất nhập khẩu Thủy sản Bến Tre"},{"mack": "ACC","ten": "CTCP Đầu tư và Xây dựng Bình Dương ACC"},{"mack": "ACL","ten": "CTCP Xuất Nhập Khẩu Thủy sản Cửu Long An Giang"},{"mack": "ADS","ten": "CTCP Damsan"},{"mack": "AGF","ten": "CTCP Xuất nhập khẩu Thủy sản An Giang"},{"mack": "AGM","ten": "CTCP Xuất Nhập Khẩu An Giang"},{"mack": "AMD","ten": "CTCP Đầu tư và Khoáng sản FLC Stone"},{"mack": "ANV","ten": "CTCP Nam Việt"},{"mack": "APC","ten": "CTCP Chiếu xạ An Phú"},{"mack": "ASM","ten": "CTCP Tập đoàn Sao Mai"},{"mack": "ASP","ten": "CTCP Tập đoàn Dầu khí An Pha"},{"mack": "AST","ten": "CTCP Dịch vụ Hàng không Taseco"},{"mack": "ATG","ten": "CTCP An Trường An"},{"mack": "BBC","ten": "CTCP BIBICA"},{"mack": "BCE","ten": "CTCP Xây dựng và Giao thông Bình Dương"},{"mack": "BFC","ten": "CTCP Phân bón Bình Điền"},{"mack": "BHN","ten": "Tổng CTCP Bia – Rượu – Nước giải khát Hà Nội"},{"mack": "BMC","ten": "CTCP Khoáng sản Bình Định"}],
-      val: 'HPG',
+      val: '',
       show: false,
       market: [],
       marketshow: false
@@ -89,7 +95,6 @@ display: none;
 .v-suggestions {
     position: relative;
     box-sizing: border-box;
-    height: 500px;
 }
 ul.items{
 }
