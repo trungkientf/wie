@@ -2,13 +2,13 @@ console.log('background !')
 function openWi() {
     var top=(screen.height/2)-300;
         var left=(screen.width/2);
-        window.open('/pages/popup.html','Wichart','scrollbars=no,width=640,height=700,top='+top+',left='+left);
+        window.open('/pages/popup.html','Wichart','scrollbars=no,width=640,height=800,top='+top+',left='+left);
 }
 
   chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
       "id": "wi",
-      "title": "A Little Wichart",
+      "title": "Wichart",
       "contexts": ["all"]
     });
   });

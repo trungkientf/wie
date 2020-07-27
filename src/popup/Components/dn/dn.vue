@@ -6,7 +6,7 @@
                 <a target="_blank" :href="'https://wichart.vn/mychart?mack='+mack.mack"><button class="bg-blue-600 hover:bg-blue-700 text-white p-2 mx-4 mt-3 w-24 rounded-full shadow-lg hover:shadow-xs text-sm inline-block" ><i class="fe fe-line-chart mr-1"></i> Wichart</button></a>
             </div>
         </div>
-        <div class="block h-24 bg-gray-200 shadow-inner "></div>
+        <Status  :mack="mack" :trade="trade" :changeTrade="changeTrade" />
         <div class="text-center">
           <div @click="setActive(1)" :class="(activeTab == 1)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4">Tổng quan</div>
           <div @click="setActive(2)" :class="(activeTab == 2)?'bg-blue-100 text-blue-500 font-semibold':'text-gray-500 font-medium'" class="inline-block text-base  btn-nav mx-2 my-3 py-2 px-4">Hồ sơ</div>
@@ -22,26 +22,52 @@
             </div>
             <iframe :class="(activeTab == 5)?'':'hidden'" :src="'https://dchart.vndirect.com.vn/?language=vi&symbol='+mack.mack+'&timeframe=D'" width="640px" height="420px" frameborder="0" style="border-width: 2px; border-style: solid; border-color: #cdcdcd54; border-radius: 0.25rem"></iframe>
         </div>
+        <Tongquan v-if="activeTab == 1" :mack="mack" :trade="trade" />
+        <Hoso v-if="activeTab == 2" :mack="mack" />
+        <Tintuc v-if="activeTab == 3" :mack="mack" />
         <PTKT v-if="activeTab == 5" :mack="mack" />
-        <img v-if="true" class="w-24 mx-6 my-4" :src="'https://finance.vietstock.vn/image/'+mack.mack" :alt="mack.mack" >
         <iframe v-if="false" v-resize="{ log: true }" width="640px" :src="'https://wichart.vn/tintuc/'+mack.mack" frameborder="0" scrolling="yes" ></iframe>
       
     </div>
 </template>
 <script>
+  import Axios from 'axios'
   import PTKT from './ptkt.vue'
+  import Status from './status.vue'
+  import Tongquan from './tongquan.vue'
+  import Hoso from './hoso.vue'
+  import Tintuc from './tintuc.vue'
   export default {
     name: 'Dn',
     components: {
-      PTKT
+      PTKT,
+      Status,
+      Tongquan,
+      Hoso,
+      Tintuc
     },
     props: { mack:Object },
     data: () => ({
-      activeTab: 5,
+      activeTab: 2,
+      trade: '',
+      changeTrade: ''
     }),
     computed: {
     },
     created () {
+        Axios.post('https://finance.vietstock.vn/company/tradinginfo',{
+            code: this.mack.mack,
+            s: 0
+        }).then(res => { this.trade = res.data})
+        setInterval(() => {
+            Axios.post('https://finance.vietstock.vn/company/tradinginfo',{
+            code: this.mack.mack,
+            s: 0
+        }).then(res => { 
+            if (res.data.Change == this.trade.Change) {this.changeTrade = ''} else if (res.data.Change > this.trade.Change) {this.changeTrade = 'bg-green-200'} else {this.changeTrade = 'bg-red-200'}
+            this.trade = res.data
+            })
+        },4000)
     },
     mounted () {
       window.addEventListener('DOMContentLoaded', function(e) {
